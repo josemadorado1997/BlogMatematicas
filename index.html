@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matemáticas 3ºA — ¡Héroes del Número!</title>
+<style>
+ @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&family=Bangers&display=swap');
+  :root {
+    --marvel-red: #E23636;
+    --marvel-gold: #F5C518;
+    --marvel-blue: #003FA3;
+    --space-dark: #0A0A1A;
+    --space-mid: #12122A;
+    --star-white: #F0F4FF;
+    --neon-yellow: #FFE600;
+    --neon-cyan: #00E5FF;
+    --card-bg: #1A1A35;
+    --text-light: #E8EEFF;
+    --text-muted: #9AA3CC;
+    --sky-dark:   #0277BD;
+    --shadow-sm:  0 2px 8px rgba(0,0,0,0.10);
+    --shadow-md:  0 6px 20px rgba(0,0,0,0.13);
+    --shadow-lg:  0 12px 36px rgba(0,0,0,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--space-dark);
+    background-image: url('https://espadasymas.com/cdn/shop/articles/imagen_2025-11-27_033238407_7d846772-5c53-445a-b0ed-fae1642debbb.png?v=1764226018');
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--text-light);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 40%, #fff 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 40% 5%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 60%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 20%, #fff 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 80% 75%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 35%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 80%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 90%, #fff 0%, transparent 100%),
+      radial-gradient(2px 2px at 35% 55%, rgba(100,149,237,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 10%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 5% 50%, #fff 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 95% 85%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 48% 30%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 73% 55%, rgba(255,230,0,0.6) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  body.unit-open::before { display: none; }
+
+  /* ─── HEADER ─── */
+  header {
+    position: relative; z-index: 10;
+    background: linear-gradient(135deg,#7ED6FF 0%,#80ED99 55%,#FFE66D 100%);
+    border-bottom: 4px solid var(--marvel-red);
+    padding: 0;
+    overflow: hidden;
+  }
+  header::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--marvel-red), var(--marvel-gold), var(--marvel-red));
+    animation: shimmer 3s linear infinite;
+    background-size: 200% 100%;
+  }
+  @keyframes shimmer { 0%{background-position:0%} 100%{background-position:200%} }
+
+  .header-inner {
+    max-width: 1100px; margin: 0 auto;
+    padding: 28px 24px 20px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .header-badge {
+    background: var(--marvel-red);
+    color: #fff; font-family: 'Bangers', cursive; font-size: 1.05rem;
+    letter-spacing: 3px; padding: 5px 22px; border-radius: 20px;
+    text-transform: uppercase;
+  }
+  header h1 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    color: var(--neon-yellow);
+    text-shadow: 4px 4px 0 var(--marvel-red), 0 0 30px rgba(245,197,24,0.5);
+    letter-spacing: 4px; text-align: center; line-height: 1.1;
+  }
+  header p {
+    color: var(--text-muted); font-size: 1rem; font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .hero-icons-row {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 6px;
+  }
+  .hero-mini { font-size: 2rem;  cursor: default; }
+  .hero-mini:nth-child(2) { animation-delay: 0.3s; }
+  .hero-mini:nth-child(3) { animation-delay: 0.6s; }
+  .hero-mini:nth-child(4) { animation-delay: 0.9s; }
+  .hero-mini:nth-child(5) { animation-delay: 1.2s; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(126,214,255,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--marvel-blue);
+    padding: 10px 16px;
+    display: flex; justify-content: center;
+  }
+  .nav-btn {
+ display:block;
+ margin:0 auto;
+
+    background: var(--marvel-blue); border: none; color: #fff;
+    font-family: 'Bangers', cursive; font-size: 1.1rem; letter-spacing: 2px;
+    padding: 10px 28px; border-radius: 30px; cursor: pointer;
+    transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,63,163,0.5);
+  }
+  .nav-btn:hover { background: var(--marvel-blue); transform: none; }
+
+  /* ─── MAIN WRAPPER ─── */
+  main { position: relative; z-index: 5; }
+
+  /* ─── HOME ─── */
+  #home { display: block; }
+  #home.hidden { display: none; }
+
+  .section-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    color: var(--neon-yellow);
+    text-shadow: 3px 3px 0 var(--marvel-red);
+    text-align: center; letter-spacing: 3px;
+    padding: 36px 16px 8px;
+  }
+  .section-subtitle {
+    text-align: center; color: #fff;
+    font-size: 1.1rem; font-weight: 800;
+    padding-bottom: 28px; letter-spacing: 0.5px;
+  }
+
+  .units-grid {
+    max-width: 1200px; margin: 0 auto;
+    padding: 32px 16px 60px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 22px;
+  }
+
+  /* ─── UNIT CARD ─── */
+  .unit-card {
+    background: var(--card-bg);
+    background-size: cover;
+    background-position: center;
+    border: 3px solid rgba(255,255,255,0.12);
+    border-radius: 22px;
+    padding: 28px 20px 22px;
+    cursor: pointer;
+    transition: transform 0.22s, border-color 0.22s, box-shadow 0.22s;
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  /* Dark overlay so text is always readable over background images */
+  .unit-card::after {
+    content: ''; position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.62) 100%);
+    border-radius: 20px;
+    pointer-events: none;
+  }
+  .unit-card > * { position: relative; z-index: 1; }
+  .unit-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.6), 0 0 28px var(--unit-accent, #E23636);
+    border-color: var(--unit-accent, #E23636);
+  }
+  .unit-card .hero-emoji {
+    font-size: 4.5rem; line-height: 1;
+    filter: drop-shadow(0 0 14px var(--unit-accent, #E23636));
+    /* animación bob eliminada */
+  }
+  @keyframes bob { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-5px) rotate(2deg)} }
+  .unit-number {
+    font-family: 'Bangers', cursive;
+    font-size: 0.9rem; letter-spacing: 3px;
+    color: #fff;
+    background: var(--unit-accent, #E23636);
+    padding: 3px 14px; border-radius: 20px;
+  }
+  .unit-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.25rem; letter-spacing: 1.5px;
+    text-align: center; line-height: 1.25;
+    color: #fff;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+    text-transform: uppercase;
+  }
+  .unit-enter-btn {
+    margin-top: 8px;
+    background: var(--unit-accent, #E23636);
+    color: #fff; border: none;
+    font-family: 'Bangers', cursive; font-size: 1.15rem; letter-spacing: 2px;
+    padding: 10px 26px; border-radius: 30px; cursor: pointer;
+    transition: opacity 0.2s, transform 0.18s;
+    box-shadow: 0 5px 16px rgba(0,0,0,0.4);
+  }
+  .unit-enter-btn:hover { opacity: 0.88; transform: scale(1.07); }
+
+  /* ══════════════════════════════════════
+     VISTA INTERIOR DE UNIDAD
+  ══════════════════════════════════════ */
+  #unit-view { display: none; }
+  #unit-view.visible { display: block; }
+
+  .unit-header {
+    position: relative; overflow: hidden;
+    padding: 50px 24px 38px;
+    text-align: center;
+    background: linear-gradient(120deg, var(--current-accent, #0D47A1) 0%, color-mix(in srgb, var(--current-accent, #1565C0) 70%, white) 60%, color-mix(in srgb, var(--current-accent, #283593) 55%, black) 100%);
+    border-bottom: 5px solid rgba(255,255,255,0.2);
+  }
+  .unit-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .unit-header-emoji {
+    font-size: 5.5rem; margin-bottom: 12px; display: block;
+    filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5));
+  }
+  .unit-header-number {
+    font-family: 'Fredoka One', cursive;
+    letter-spacing: 3px; font-size: 0.95rem;
+    color: #fff;
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.4);
+    padding: 4px 20px; border-radius: 30px;
+    display: inline-block; margin-bottom: 12px;
+  }
+  .unit-header h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    color: #fff;
+    text-shadow: 0 3px 10px rgba(0,0,0,0.4);
+    letter-spacing: 1.5px; line-height: 1.15;
+  }
+
+  /* ── VOLVER ── */
+  .back-btn {
+    display: block; align-items: center; gap: 8px;
+    background: var(--sky-dark); border: none;
+    color: #fff;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem; letter-spacing: 1.5px;
+    padding: 10px 24px; border-radius: 30px;
+    cursor: pointer; transition: all 0.2s;
+    margin: 20px auto !important;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .back-btn:hover { background: #015F9A; transform: scale(1.04); }
+
+  /* ══════════════════════════════════════
+     CONTENIDO INTERIOR
+  ══════════════════════════════════════ */
+  .unit-content {
+    max-width: 960px; margin: 0 auto;
+    padding: 36px 20px 60px;
+  }
+  .unit-section { margin-bottom: 44px; }
+
+  .unit-section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem; letter-spacing: 1.5px;
+    color: #fff;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px;
+    padding: 12px 20px;
+    background: linear-gradient(90deg, var(--current-accent, var(--sky-dark)), color-mix(in srgb, var(--current-accent, #0288D1) 70%, white));
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+  }
+  .unit-section-title .sec-icon { font-size: 1.5rem; }
+
+  /* DÍA TIC */
+  .diatic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    justify-content: center;
+    gap: 14px;
+  }
+  .diatic-box {
+    max-width: 180px;
+    background: linear-gradient(135deg, var(--current-accent, #1565C0), color-mix(in srgb, var(--current-accent, #1E88E5) 75%, white));
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 18px; padding: 22px 12px;
+    text-align: center; cursor: pointer;
+    transition: transform 0.18s, box-shadow 0.18s;
+    text-decoration: none; display: block; color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+  .diatic-box:hover { transform: scale(1.07); box-shadow: var(--shadow-lg); }
+  .diatic-box .tic-num {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.2rem; color: #fff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  .diatic-box .tic-label {
+    font-size: 0.9rem; font-weight: 800;
+    color: rgba(255,255,255,0.9); margin-top: 4px;
+  }
+  .diatic-box.sin-link { opacity: 0.45; cursor: default; }
+  .diatic-box.sin-link:hover { transform: none; box-shadow: var(--shadow-sm); }
+
+  /* REFUERZO Y AMPLIACIÓN */
+  .refuerzo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  .refuerzo-box, .ampliacion-box {
+    border-radius: 18px; padding: 30px 16px;
+    text-align: center; cursor: pointer;
+    transition: transform 0.18s, box-shadow 0.18s;
+    text-decoration: none; display: block; color: #fff;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3rem; letter-spacing: 1px;
+    box-shadow: var(--shadow-md);
+    border: 3px solid rgba(255,255,255,0.3);
+  }
+  .refuerzo-box .rf-icon, .ampliacion-box .rf-icon {
+    font-size: 2.4rem; margin-bottom: 8px; display: block;
+  }
+  .refuerzo-box { background: linear-gradient(135deg, #D8B4FE, #C084FC); }
+  .ampliacion-box { background: linear-gradient(135deg, #D9FF66, #7CFC00); color:#1b1b1b; }
+  .refuerzo-box:hover, .ampliacion-box:hover { transform: scale(1.06); box-shadow: var(--shadow-lg); }
+  .refuerzo-box.sin-link, .ampliacion-box.sin-link { opacity: 0.45; cursor: default; }
+  .refuerzo-box.sin-link:hover, .ampliacion-box.sin-link:hover { transform: none; box-shadow: var(--shadow-md); }
+
+  /* ══════════════════════════════════════
+     TOAST "PRÓXIMAMENTE"
+  ══════════════════════════════════════ */
+  .sin-link-msg {
+    display: none;
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+    background: #0D47A1;
+    color: #fff;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem; letter-spacing: 1.5px;
+    padding: 14px 32px; border-radius: 30px; z-index: 9999;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.3);
+    animation: fadeInOut 2.4s ease forwards;
+  }
+  @keyframes fadeInOut {
+    0%  { opacity:0; transform:translateX(-50%) translateY(10px); }
+    15% { opacity:1; transform:translateX(-50%) translateY(0); }
+    75% { opacity:1; }
+    100%{ opacity:0; }
+  }
+
+  /* ══════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════ */
+  footer {
+    background: var(--sky-dark);
+    border-top: 3px solid rgba(255,255,255,0.15);
+    padding: 22px; text-align: center;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.9rem; font-weight: 700;
+  }
+  footer span { color: var(--yellow); }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════ */
+  @media (max-width: 600px) {
+    .units-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+    .unit-card { padding: 18px 12px 16px; }
+    .unit-card .hero-emoji { font-size: 3rem; }
+    .unit-title { font-size: 0.95rem; }
+    .diatic-grid, .refuerzo-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="sin-link-msg" id="sinLinkMsg">🔒 ¡Próximamente!</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    
+    <h1>SÚPER CLASE DE 3ºA</h1>
+    <p>Aventuras matemáticas con los héroes del Universo</p>
+    <div class="hero-icons-row">
+      <span class="hero-mini">🦸</span>
+      <span class="hero-mini">⚡</span>
+      <span class="hero-mini">🕷️</span>
+      <span class="hero-mini">🛡️</span>
+      <span class="hero-mini">🌟</span>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <button class="nav-btn" style="cursor:default;">BLOG DE MATEMÁTICAS</button>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+<!-- HOME: UNITS GRID -->
+<div id="home">
+  <div class="units-grid" id="units-grid"></div>
+</div>
+
+<!-- UNIT DETAIL VIEW -->
+<div id="unit-view">
+  <button class="back-btn" onclick="showHome()">⬅ Volver al inicio</button>
+
+  <div class="unit-header" id="unit-header">
+    <span class="unit-header-emoji" id="unit-emoji">🦸</span>
+    <div class="unit-header-number" id="unit-num-label">UNIDAD 1</div>
+    <h2 id="unit-title-big">Título</h2>
+  </div>
+
+  <div class="unit-content">
+    <div class="unit-section">
+      <div class="unit-section-title"><span class="sec-icon">💻</span> DÍA TIC</div>
+      <div class="diatic-grid" id="diatic-grid"></div>
+    </div>
+    <div class="unit-section">
+      <div class="unit-section-title"><span class="sec-icon">🎯</span> REFUERZO Y AMPLIACIÓN</div>
+      <div class="refuerzo-grid" id="refuerzo-grid"></div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  Hecho con <span>❤️</span> para la clase de 3ºA · Matemáticas con Superhéroes
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CONFIGURACIÓN DE UNIDADES
+// Cada unidad tiene un campo "bg" con la URL del fondo.
+// Cambia esa URL para personalizar el fondo de cada UD.
+// ═══════════════════════════════════════════════════════
+const UNITS = [
+  {
+    num: 1,
+    title: "Los números con los 4 Fantásticos",
+    emoji: "🔥",
+    accent: "#E87A00",
+    bg: "https://i.redd.it/m26k88ystufa1.jpg"
+  },
+  {
+    num: 2,
+    title: "Sumas y restas con Capitán América",
+    emoji: "🛡️",
+    accent: "#1A6BB5",
+    bg: "https://wallpapers.com/images/hd/4k-captain-america-7t2g8dklvkmpfzus.jpg"
+  },
+  {
+    num: 3,
+    title: "Multiplicación con Iron Man",
+    emoji: "🤖",
+    accent: "#C0392B",
+    bg: "https://image.lexica.art/full_webp/7705ead9-356a-4601-bd87-d75a81be7be8",
+    bgPosition: "center 20%",
+    bgSize: "cover"
+  },
+  {
+    num: 4,
+    title: "División con la Bruja Escarlata",
+    emoji: "🔮",
+    accent: "#A020A0",
+    bg: "https://gizmodo.com/app/uploads/2022/09/74d164cbc20992c65f85be59a95a38b4.jpg"
+  },
+  {
+    num: 5,
+    title: "Practico problemas con Thor",
+    emoji: "⚡",
+    accent: "#1B7FCC",
+    bg: "https://wallpapercave.com/wp/wp8405040.jpg"
+  },
+  {
+    num: 6,
+    title: "Fracciones con Spiderman",
+    emoji: "🕷️",
+    accent: "#D62828",
+    bg: "https://cdn.themedizine.com/2020/03/spiderman-comics-cuarentena-500x300.jpg"
+  },
+  {
+    num: 7,
+    title: "Decimales, tiempo y dinero con Dr. Strange",
+    emoji: "🧙🏻",
+    accent: "#0B9B88",
+    bg: "https://cdn.marvel.com/content/2x/009drs_com_mas_mob_01.webp"
+  },
+  {
+    num: 8,
+    title: "Probabilidad con Dominó",
+    emoji: "🎯",
+    accent: "#1F7A3D",
+    bg: "https://www.tomosygrapas.com/wp-content/uploads/2018/04/domino.jpg"
+  },
+  {
+    num: 9,
+    title: "Longitudes con Ant Man",
+    emoji: "🐜",
+    accent: "#5B8A00",
+    bg: "https://i0.wp.com/ifanboy.com/wp-content/uploads/2012/11/2653069-mighty_avengers__5___page_20.jpg?ssl=1"
+  },
+  {
+    num: 10,
+    title: "Capacidad y masa con Hulk",
+    emoji: "💚",
+    accent: "#227B22",
+    bg: "https://mlpnk72yciwc.i.optimole.com/cqhiHLc.IIZS~2ef73/w:auto/h:auto/q:75/https://bleedingcool.com/wp-content/uploads/2025/08/75960620663602816.jpg",
+    bgPosition: "center 15%",
+    bgSize: "cover"
+  },
+  {
+    num: 11,
+    title: "Geometría plana y Mysterio",
+    emoji: "🌐",
+    accent: "#006680",
+    bg: "https://sm.ign.com/t/ign_es/gallery/s/spider-man/spider-man-10-essential-mysterio-comics_v67t.1200.jpg"
+  },
+  {
+    num: 12,
+    title: "Ayudando a Cubo Cósmico con los Cuerpos Geométricos",
+    emoji: "🧊",
+    accent: "#5E35B1",
+    bg: "https://i.blogs.es/749830/teseracto-capitana-marvel/1366_2000.jpg"
+  }
+];
+
+// ═══════════════════════════════════════════════════════
+// ENLACES DE ACTIVIDADES
+// Rellena las URLs vacías ("") con los enlaces reales.
+// ═══════════════════════════════════════════════════════
+const LINKS = {
+  1: {
+    ejercicios: [
+      "https://es.ixl.com/matematicas/3-primaria/ordenar-numeros-hasta-100",
+      "https://es.ixl.com/matematicas/3-primaria/comparar-numeros-hasta-1000",
+      "",
+      ""
+    ],
+    repaso: [
+      "https://es.ixl.com/matematicas/2-primaria/ordenar-numeros-hasta-1000","","",
+      "https://es.ixl.com/matematicas/2-primaria/valor-posicional-hasta-los-millares",
+      "https://es.ixl.com/matematicas/2-primaria/convertir-a-un-numero-o-desde-un-numero-hasta-los-millares",
+      "https://wordwall.net/es/resource/24102031/figuras-2d/identificar-y-relacionar-figuras-2d",
+      "","","","","",""
+    ],
+    quesabemos: [
+      "https://es.ixl.com/matematicas/2-primaria/seleccionar-los-numeros-pares-o-impares",
+      "https://es.ixl.com/matematicas/2-primaria/contar-hacia-delante-y-hacia-atras-hasta-100",
+      "https://es.ixl.com/matematicas/2-primaria/rectas-numericas-hasta-100",
+      "https://es.ixl.com/matematicas/2-primaria/rectas-numericas-hasta-1000",
+      "https://es.ixl.com/matematicas/2-primaria/comparar-numeros-hasta-100",
+      "https://es.ixl.com/matematicas/2-primaria/ordenar-numeros-hasta-100",
+      "https://es.ixl.com/matematicas/2-primaria/comparar-numeros-hasta-1000",
+      "https://es.ixl.com/matematicas/2-primaria/ordenar-numeros-hasta-1000"
+    ],
+    diatic: [
+      "https://es.ixl.com/matematicas/3-primaria/ordenar-numeros-hasta-100",
+      "https://es.ixl.com/matematicas/3-primaria/comparar-numeros-hasta-1000",
+      "https://es.ixl.com/matematicas/2-primaria/ordenar-numeros-hasta-1000",
+      "https://es.ixl.com/matematicas/2-primaria/valor-posicional-hasta-los-millares",
+      "https://es.ixl.com/matematicas/2-primaria/convertir-a-un-numero-o-desde-un-numero-hasta-los-millares",
+      "https://es.ixl.com/matematicas/2-primaria/rectas-numericas-hasta-1000",
+      "https://es.ixl.com/matematicas/2-primaria/seleccionar-los-numeros-pares-o-impares",
+      "https://es.ixl.com/matematicas/2-primaria/contar-hacia-delante-y-hacia-atras-hasta-100",
+      "https://es.ixl.com/matematicas/2-primaria/rectas-numericas-hasta-100",
+      "https://es.ixl.com/matematicas/2-primaria/comparar-numeros-hasta-1000"
+    ],
+    refuerzo: "https://www.liveworksheets.com/worksheet/es/math-place-value/8373216",
+    ampliacion: "https://www.liveworksheets.com/worksheet/es/math-place-value/8265749"
+  },
+  2: {
+    ejercicios: ["","","",""],
+    repaso:     ["","","","","","","","","","","",""],
+    quesabemos: ["","","","","","","",""],
+    diatic: [
+      "https://es.ixl.com/matematicas/3-primaria/operaciones-de-suma-sumar-hasta-20",
+      "https://es.ixl.com/matematicas/3-primaria/operaciones-de-restas-hasta-18",
+      "https://es.ixl.com/matematicas/3-primaria/operaciones-relacionadas-de-suma-hasta-20",
+      "https://es.ixl.com/matematicas/3-primaria/restar-multiplos-de-100",
+      "https://es.ixl.com/matematicas/3-primaria/sumar-numeros-de-dos-cifras-sin-reagrupar",
+      "https://es.ixl.com/matematicas/3-primaria/completar-la-resta-numeros-de-hasta-dos-cifras",
+      "https://es.ixl.com/matematicas/3-primaria/sumar-dos-numeros-de-cuatro-o-mas-cifras",
+      "https://es.ixl.com/matematicas/3-primaria/restar-numeros-de-hasta-cuatro-cifras",
+      "https://www.liveworksheets.com/worksheet/en/math-addition-and-subtraction/1010275",
+      "https://www.liveworksheets.com/worksheet/en/math-addition-and-subtraction/996242"
+    ],
+    refuerzo: "https://www.liveworksheets.com/worksheet/es/math-addition-and-subtraction/8330545",
+    ampliacion: "https://www.liveworksheets.com/worksheet/es/math-addition-and-subtraction/106497"
+  },
+  3: {
+    ejercicios: ["","","",""],
+    repaso:     ["","","","","","","","","","","",""],
+    quesabemos: ["","","","","","","",""],
+    diatic: [
+      "https://es.ixl.com/matematicas/3-primaria/operaciones-de-multiplicacion-hasta-5-hallar-el-factor-que-falta",
+      "https://es.ixl.com/matematicas/3-primaria/operaciones-de-multiplicacion-por-6-7-8-y-9",
+      "https://es.ixl.com/matematicas/3-primaria/operaciones-de-multiplicacion-por-6-7-8-y-9-hallar-el-factor-que-falta",
+      "https://es.ixl.com/matematicas/3-primaria/operaciones-de-multiplicacion-hasta-10",
+      "https://es.ixl.com/matematicas/3-primaria/multiplicar-por-un-multiplo-de-diez",
+      "https://es.ixl.com/matematicas/3-primaria/multiplicar-numeros-que-terminan-con-ceros",
+      "https://es.ixl.com/matematicas/3-primaria/multiplicar-numeros-de-una-cifra-por-numeros-de-dos-cifras",
+      "https://es.ixl.com/matematicas/3-primaria/multiplicar-numeros-de-una-cifra-por-numeros-de-tres-cifras"
+    ],
+    refuerzo: "https://www.liveworksheets.com/worksheet/en/math-multiplication-and-division/221853",
+    ampliacion: "https://www.liveworksheets.com/worksheet/es/math-multiplication-and-division/8276350"
+  },
+  4: {
+    ejercicios: ["","","",""],
+    repaso:     ["","","","","","","","","","","",""],
+    quesabemos: ["","","","","","","",""],
+    diatic: [
+      "https://es.ixl.com/matematicas/3-primaria/divisiones-sobre-grupos",
+      "https://es.ixl.com/matematicas/3-primaria/relacionar-multiplicaciones-y-divisiones-con-matrices",
+      "https://es.ixl.com/matematicas/3-primaria/relacionar-la-multiplicacion-y-la-division",
+      "https://es.ixl.com/matematicas/3-primaria/dividir-por-numeros-hasta-5",
+      "https://es.ixl.com/matematicas/3-primaria/operaciones-de-division-entre-6-7-8-y-9",
+      "https://es.ixl.com/matematicas/3-primaria/dividir-por-numeros-de-2-cifras",
+      "https://es.ixl.com/matematicas/3-primaria/dividir-numeros-grandes-por-numeros-de-dos-cifras",
+      "https://es.ixl.com/matematicas/3-primaria/dividir-numeros-grandes",
+      "",
+      ""
+    ],
+    refuerzo: "https://www.liveworksheets.com/worksheet/es/math-multiplication-and-division/8285917",
+    ampliacion: "https://www.liveworksheets.com/worksheet/es/math-multiplication-and-division/8123348"
+  },
+  5: {
+    ejercicios: ["","","",""],
+    repaso:     ["","","","","","","","","","","",""],
+    quesabemos: ["","","","","","","",""],
+    diatic: ["","","","","","","","","",""],
+    refuerzo: "",
+    ampliacion: ""
+  },
+  6: {
+    ejercicios: ["","","",""],
+    repaso:     ["","","","","","","","","","","",""],
+    quesabemos: ["","","","","","","",""],
+    diatic: [
+      "https://es.ixl.com/matematicas/3-primaria/fracciones-simples-partes-de-un-todo",
+      "https://es.ixl.com/matematicas/3-primaria/fracciones-de-rectas-numericas-fracciones-unitarias",
+      "https://es.ixl.com/matematicas/3-primaria/representar-fracciones-en-rectas-numericas",
+      "https://es.ixl.com/matematicas/3-primaria/comparar-fracciones-usando-referencias",
+      "https://es.ixl.com/matematicas/3-primaria/ordenar-fracciones",
+      "https://es.ixl.com/matematicas/3-primaria/hallar-fracciones-equivalentes-usando-modelos-de-area",
+      "https://es.ixl.com/matematicas/3-primaria/patrones-de-fracciones-equivalentes",
+      "https://es.ixl.com/matematicas/3-primaria/sumar-fracciones-con-denominadores-comunes-usando-rectas-numericas",
+      "https://es.ixl.com/matematicas/3-primaria/restar-fracciones-con-denominadores-comunes-usando-rectas-numericas",
+      "https://es.ixl.com/matematicas/3-primaria/sumar-y-restar-fracciones-con-denominadores-comunes"
+    ],
+    refuerzo: "https://www.liveworksheets.com/worksheet/es/math-fractions-and-decimals/8173623",
+    ampliacion: "https://www.liveworksheets.com/worksheet/es/math-fractions-and-decimals/8228868"
+  },
+  7: {
+    ejercicios: ["","","",""],
+    repaso:     ["","","","","","","","","","","",""],
+    quesabemos: ["","","","","","","",""],
+    diatic: [
+      "https://es.ixl.com/matematicas/3-primaria/representar-decimales-en-rectas-numericas",
+      "https://es.ixl.com/matematicas/3-primaria/redondear-decimales",
+      "https://es.ixl.com/matematicas/3-primaria/comparar-decimales-en-rectas-numericas",
+      "https://es.ixl.com/matematicas/3-primaria/ordenar-decimales",
+      "https://es.ixl.com/matematicas/3-primaria/sumar-decimales",
+      "https://es.ixl.com/matematicas/3-primaria/restar-decimales",
+      "https://es.ixl.com/matematicas/3-primaria/sumar-y-restar-decimales",
+      "https://es.ixl.com/matematicas/3-primaria/estimar-sumas-y-restas-de-decimales",
+      "https://www.liveworksheets.com/worksheet/es/math-time-and-money/8416678",
+      "https://www.liveworksheets.com/worksheet/es/math-time-and-money/8425556"
+    ],
+    refuerzo: "https://www.liveworksheets.com/worksheet/es/math-fractions-and-decimals/8340983",
+    ampliacion: "https://www.liveworksheets.com/worksheet/es/math-fractions-and-decimals/8340995"
+  },
+  8: {
+    ejercicios: ["","","",""],
+    repaso:     ["","","","","","","","","","","",""],
+    quesabemos: ["","","","","","","",""],
+    diatic: [
+      "https://es.ixl.com/matematicas/3-primaria/media-y-moda",
+      "https://es.ixl.com/matematicas/3-primaria/mas-probable-menos-probable-e-igual-de-probable",
+      "https://es.ixl.com/matematicas/3-primaria/seguro-probable-improbable-e-imposible"
+    ],
+    refuerzo: "",
+    ampliacion: ""
+  },
+  9: {
+    ejercicios: ["","","",""],
+    repaso:     ["","","","","","","","","","","",""],
+    quesabemos: ["","","","","","","",""],
+    diatic: [
+      "https://es.ixl.com/matematicas/3-primaria/medir-con-una-regla",
+      "https://es.ixl.com/matematicas/3-primaria/comparar-unidades-de-longitud",
+      "https://es.ixl.com/matematicas/3-primaria/convertir-unidades-de-longitud"
+    ],
+    refuerzo: "https://www.liveworksheets.com/worksheet/es/math-measurement/8325321",
+    ampliacion: "https://www.liveworksheets.com/worksheet/es/math-measurement/8246912"
+  },
+  10: {
+    ejercicios: ["","","",""],
+    repaso:     ["","","","","","","","","","","",""],
+    quesabemos: ["","","","","","","",""],
+    diatic: [
+      "https://es.ixl.com/matematicas/3-primaria/comparar-unidades-de-capacidad",
+      "https://es.ixl.com/matematicas/3-primaria/convertir-unidades-de-capacidad",
+      "https://es.ixl.com/matematicas/3-primaria/convertir-unidades-de-masa",
+      "https://es.ixl.com/matematicas/3-primaria/comparar-unidades-de-masa"
+    ],
+    refuerzo: "https://www.liveworksheets.com/worksheet/es/math-measurement/8159217",
+    ampliacion: "https://www.liveworksheets.com/worksheet/es/math-measurement/8344461"
+  },
+  11: {
+    ejercicios: ["","","",""],
+    repaso:     ["","","","","","","","","","","",""],
+    quesabemos: ["","","","","","","",""],
+    diatic: [
+      "https://es.ixl.com/matematicas/3-primaria/seleccionar-figuras-de-dos-dimensiones",
+      "https://es.ixl.com/matematicas/3-primaria/angulos-agudos-rectos-obtusos-y-llanos",
+      "https://es.ixl.com/matematicas/3-primaria/clasificar-triangulos",
+      "https://es.ixl.com/matematicas/3-primaria/perimetro",
+      "https://es.ixl.com/matematicas/3-primaria/angulos-mayores-que-iguales-a-o-menores-que-un-angulo-recto",
+      "https://es.ixl.com/matematicas/3-primaria/identificar-lineas-paralelas-perpendiculares-y-secantes"
+    ],
+    refuerzo: "https://www.liveworksheets.com/worksheet/es/math-geometry/8273941",
+    ampliacion: "https://www.liveworksheets.com/worksheet/es/math-geometry/8449115"
+  },
+  12: {
+    ejercicios: ["","","",""],
+    repaso:     ["","","","","","","","","","","",""],
+    quesabemos: ["","","","","","","",""],
+    diatic: [
+      "https://es.ixl.com/matematicas/3-primaria/seleccionar-figuras-tridimensionales",
+      "https://es.ixl.com/matematicas/3-primaria/desarrollos-de-figuras-tridimensionales",
+      "https://es.ixl.com/matematicas/3-primaria/identificar-las-caras-de-figuras-tridimensionales",
+      "https://es.ixl.com/matematicas/3-primaria/identificar-figuras-trazadas-a-partir-de-cuerpos-solidos",
+      "https://es.ixl.com/matematicas/3-primaria/figuras-de-objetos-de-la-vida-cotidiana",
+      "https://es.ixl.com/matematicas/3-primaria/contar-y-comparar-lados-y-vertices"
+    ],
+    refuerzo: "https://www.liveworksheets.com/worksheet/es/math-geometry/8435040",
+    ampliacion: "https://www.liveworksheets.com/worksheet/es/math-geometry/8141948"
+  }
+};
+
+// URL de fondo general (inicio)
+const HOME_BG = "https://espadasymas.com/cdn/shop/articles/imagen_2025-11-27_033238407_7d846772-5c53-445a-b0ed-fae1642debbb.png?v=1764226018";
+
+function setBodyBg(url) {
+  if (url) {
+    document.body.style.backgroundImage = `url('${url}')`;
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundAttachment = "fixed";
+  } else {
+    document.body.style.backgroundImage = "none";
+    document.body.style.backgroundSize = "";
+    document.body.style.backgroundAttachment = "";
+  }
+}
+
+// ─── BUILD HOME GRID ───
+const grid = document.getElementById('units-grid');
+UNITS.forEach(u => {
+  const card = document.createElement('div');
+  card.className = 'unit-card';
+  card.style.setProperty('--unit-accent', u.accent);
+  if (u.bg) {
+    card.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.55)),url(${u.bg})`;
+    card.style.backgroundPosition = u.bgPosition || 'center';
+    card.style.backgroundSize = u.bgSize || 'cover';
+  }
+  card.innerHTML = `
+    <div class="hero-emoji">${u.emoji}</div>
+    <div class="unit-number">UNIDAD ${u.num}</div>
+    <div class="unit-title">${u.title}</div>
+    <button class="unit-enter-btn">🚀 ¡JUGAR! 🚀</button>
+  `;
+  card.addEventListener('click', () => openUnit(u));
+  grid.appendChild(card);
+});
+
+// ─── HELPER: make a link box or a disabled box ───
+function makeLink(href, cls, inner, tag='a') {
+  const active = href && href !== '#';
+  if (active) {
+    return `<a href="${href}" target="_blank" class="${cls}">${inner}</a>`;
+  } else {
+    return `<div class="${cls} sin-link" onclick="showProximamente()">${inner}</div>`;
+  }
+}
+
+function showProximamente() {
+  const msg = document.getElementById('sinLinkMsg');
+  msg.style.display = 'block';
+  msg.style.animation = 'none';
+  void msg.offsetWidth;
+  msg.style.animation = 'fadeInOut 2.4s ease forwards';
+  setTimeout(() => { msg.style.display = 'none'; }, 2500);
+}
+
+// ─── OPEN UNIT ───
+function openUnit(u) {
+  document.documentElement.style.setProperty('--current-accent', u.accent);
+  document.body.classList.add('unit-open');
+  document.body.style.backgroundImage = 'none';
+  document.body.style.background = '#fff';
+
+  document.getElementById('unit-emoji').textContent = u.emoji;
+  document.getElementById('unit-num-label').textContent = `UNIDAD ${u.num}`;
+  document.getElementById('unit-title-big').textContent = u.title.toUpperCase();
+
+  const data = LINKS[u.num] || {};
+
+  // DÍA TIC
+  const ticGrid = document.getElementById('diatic-grid');
+  ticGrid.innerHTML = '';
+  const ticLinks = (data.diatic || []).filter(l => l && l.trim() !== '');
+  ticLinks.forEach((link, idx) => {
+    const n = idx + 1;
+    ticGrid.innerHTML += makeLink(link, 'diatic-box',
+      `<div class="tic-num">${n}</div><div class="tic-label">Ejercicio ${n}</div>`);
+  });
+  // Reparte los ejercicios en como máximo 2 filas, centradas (solo en pantallas grandes)
+  const ticCount = ticLinks.length;
+  const ticCols = ticCount <= 5 ? ticCount : Math.ceil(ticCount / 2);
+  ticGrid.style.gridTemplateColumns = (ticCols > 0 && window.innerWidth > 600)
+    ? `repeat(${ticCols}, minmax(140px, 180px))`
+    : '';
+
+  // REFUERZO Y AMPLIACIÓN
+  document.getElementById('refuerzo-grid').innerHTML = `
+    ${makeLink(data.refuerzo,   'refuerzo-box',   '<span class="rf-icon">🛠️</span>REFUERZO')}
+    ${makeLink(data.ampliacion, 'ampliacion-box', '<span class="rf-icon">🚀</span>AMPLIACIÓN')}
+  `;
+
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('unit-view').classList.add('visible');
+  const b=document.querySelector('.nav-btn'); if(b){b.style.display='block';b.style.margin='0 auto';} window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── SHOW HOME ───
+function showHome() {
+  document.getElementById('unit-view').classList.remove('visible');
+  document.getElementById('home').classList.remove('hidden');
+  document.body.classList.remove('unit-open');
+  setBodyBg(HOME_BG);
+  const b=document.querySelector('.nav-btn'); if(b){b.style.display='block';b.style.margin='0 auto';} window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
